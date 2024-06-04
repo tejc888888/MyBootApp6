@@ -1,29 +1,11 @@
 package jp.te4a.spring.boot.myapp6.mybootapp6;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+public interface BookRepository extends JpaRepository<BookBean, Integer>{
 
-@Repository
-public class BookRepository {
-
-    private final ConcurrentMap<Integer, BookBean> bookMap
-                                                  = new ConcurrentHashMap<>();
-
-   public BookBean save(BookBean bookBean) {
-        return bookMap.put(bookBean.getId(), bookBean);
-    }
-
-    public void delete(Integer bookId) {
-        bookMap.remove(bookId);
-    }
-
-    public List<BookBean> findAll() {
-        return new ArrayList<>(bookMap.values());
-    }
+    @Query("SELECT X FROM BookBean X ORDER BY X.title")
+    List<BookBean> findAllOrderByTitle();
 }
-
-
